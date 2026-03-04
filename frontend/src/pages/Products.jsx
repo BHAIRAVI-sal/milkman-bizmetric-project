@@ -29,10 +29,7 @@ import productImageMap from "../assets/productImageMap";
              name: p.name,
              category: p.category?.name || "Milk",
              milkType: p.milk_type?.name || "General",
-            imageUrl:
-              productImageMap[p.name] ||
-              backendImage ||
-              getCategoryImage(p.category?.name || "Milk"),
+            imageUrl: productImageMap[p.name] || backendImage || getCategoryImage(p.category?.name || "Milk"),
             displayPrice: min ? `from ${min}` : "N/A",
             minPrice: min,
            };

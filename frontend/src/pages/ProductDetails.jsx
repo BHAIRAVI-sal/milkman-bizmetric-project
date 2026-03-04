@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar.jsx";
 import { getProducts } from "../lib/api";
 import { getCategoryImage } from "../images/js/imagemap";
 import { useCart } from "../store/cart.jsx";
+import productImageMap from "../assets/productImageMap";
 
 export default function ProductDetails() {
   const { id } = useParams();
@@ -14,6 +15,15 @@ export default function ProductDetails() {
   const [selectedQty, setSelectedQty] = useState("");
   const [plan, setPlan] = useState("one-time");
   const [units, setUnits] = useState(1);
+
+  const getFallbackImage = (p) => {
+    // 1. Product-specific image from local map (highest priority)
+    if (productImageMap[p.name]) return productImageMap[p.name];
+    // 2. Backend image — only if it's not the seeded placeholder
+    if (p.image && !p.image.includes("placeholder")) return `http://localhost:8000${p.image}`;
+    // 3. Category image as last resort
+    return getCategoryImage(p.category?.name || "Milk") || "/images/home-bg.png";
+  };
 
   useEffect(() => {
     getProducts().then((data) => {
@@ -37,7 +47,7 @@ export default function ProductDetails() {
         description: p.description,
         category: p.category?.name || "Milk",
         milkType: p.milk_type?.name || "General",
-        imageUrl: getCategoryImage(p.category?.name || "Milk"),
+        imageUrl: getFallbackImage(p),
         prices,
       });
 
@@ -66,7 +76,14 @@ export default function ProductDetails() {
       <Navbar />
       <div className="max-w-5xl mx-auto px-6 md:px-10 py-10 grid md:grid-cols-2 gap-10">
         <div className="rounded-3xl overflow-hidden shadow-2xl">
-          <img src={product.imageUrl} alt={product.name} className="w-full h-[420px] object-cover" />
+          <img
+            src={product.imageUrl}
+            alt={product.name}
+            className="w-full h-[420px] object-cover"
+            onError={(e) => {
+              e.currentTarget.src = "/images/home-bg.png";
+            }}
+          />
         </div>
 
         <div className="space-y-5">
@@ -115,7 +132,13 @@ export default function ProductDetails() {
           <div className="flex gap-4 mt-4">
             <button
               onClick={() => {
-                add(product, selectedQty, unitPrice, plan, units);
+                add(
+                  { ...product, imageUrl: product.imageUrl },
+                  selectedQty,
+                  unitPrice,
+                  plan,
+                  units
+                );
                 alert("Added to cart");
                 navigate("/cart");
               }}

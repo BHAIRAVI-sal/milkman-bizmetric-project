@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const categories = [
   { name: "Milk", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpOlbgtRoy_UbhC1BRcEfPd3a9oPiRYphl1A&s" },
@@ -13,6 +14,12 @@ const categories = [
 ];
 
 export default function CategorySection() {
+  const navigate = useNavigate();
+
+  const handleCategoryClick = () => {
+    navigate("/shop-by-category");
+  };
+
   return (
     <section className="px-6 md:px-12 py-16 bg-gray-50">
       
@@ -29,6 +36,7 @@ export default function CategorySection() {
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.3 }}
             className="relative h-60 rounded-2xl overflow-hidden shadow-lg cursor-pointer group"
+            onClick={handleCategoryClick}
           >
             
             {/* Background Image */}

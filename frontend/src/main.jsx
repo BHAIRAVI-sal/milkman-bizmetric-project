@@ -6,6 +6,7 @@ import './index.css'
 
 import AuthSelect from './pages/AuthSelect.jsx'
 import Signup from './pages/Signup.jsx'
+import ShopByCategory from './pages/ShopByCategory.jsx'
 import Home from './pages/Home'
 import Products from './pages/Products'
 import ProductDetails from './pages/ProductDetails'
@@ -22,6 +23,7 @@ import { CartProvider } from './store/cart.jsx'
 
 const router = createBrowserRouter([
   { path: '/', element: <AuthSelect /> },
+  { path: '/shop-by-category', element: <ShopByCategory /> },
   { path: '/products', element: <Products /> },
   { path: '/products/:id', element: <ProductDetails /> },
   { path: '/cart', element: <CartBody /> },

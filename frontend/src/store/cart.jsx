@@ -7,6 +7,7 @@ export function CartProvider({ children }) {
 
   const add = (product, qtyLabel, price, plan, count) => {
     setCart((prev) => {
+      console.log("add to cart:", { product: product.name, id: product.id, qtyLabel, plan, count });
       const existing = prev.find(
         (i) => i.id === product.id && i.qtyLabel === qtyLabel && i.plan === plan
       );

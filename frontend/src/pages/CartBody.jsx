@@ -1,9 +1,17 @@
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { useCart } from "../store/cart.jsx";
+import { getCategoryImage } from "../images/js/imagemap";
+import productImageMap from "../assets/productImageMap";
 
 export default function CartBody() {
   const { cart = [], add, remove } = useCart();
+
+  const getFallbackImage = (item) => {
+    // Use the exact imageUrl passed from ProductDetails; no fallbacks
+    console.log("Cart item imageUrl:", item.imageUrl);
+    return item.imageUrl || "/images/home-bg.png";
+  };
 
   if (!cart.length)
     return (
@@ -19,7 +27,14 @@ export default function CartBody() {
       <div className="p-4 max-w-3xl mx-auto space-y-4">
         {cart.map((item) => (
           <div key={`${item.id}-${item.qtyLabel}-${item.plan}`} className="flex items-center justify-between border p-3 rounded shadow-sm">
-            <img src={item.imageUrl} alt={item.name} className="w-16 h-16 object-cover rounded" />
+            <img
+              src={getFallbackImage(item)}
+              alt={item.name}
+              className="w-16 h-16 object-cover rounded"
+              onError={(e) => {
+                e.currentTarget.src = "/images/home-bg.png";
+              }}
+            />
             <div className="flex-1 px-4">
               <h2 className="font-bold">{item.name}</h2>
               <p>Price: ₹{item.price}</p>

@@ -1,9 +1,16 @@
 import { useState } from "react";
 import { useCart } from "../store/cart.jsx";
+import { getCategoryImage } from "../images/js/imagemap";
+import productImageMap from "../assets/productImageMap";
 
 export default function ProductCard({ product }) {
   const { add } = useCart();
   const [qty, setQty] = useState(1);
+
+  const getFallbackImage = (product) => {
+    if (product.imageUrl) return product.imageUrl;
+    return productImageMap[product.name] || getCategoryImage("Milk") || "/images/home-bg.png";
+  };
 
   const handleAdd = () => {
     const price = Number(product.minPrice || 0);
@@ -11,7 +18,7 @@ export default function ProductCard({ product }) {
     const isWeight = /(paneer|butter|cheese|ghee|cream)/.test(name);
     const qtyLabel = isWeight ? "500g" : "500ml";
     add(
-      { id: product.id, name: product.name, imageUrl: product.imageUrl },
+      { id: product.id, name: product.name, imageUrl: getFallbackImage(product) },
       qtyLabel,
       price,
       "one-time",
@@ -23,10 +30,12 @@ export default function ProductCard({ product }) {
     <div className="rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 overflow-hidden bg-white">
       <div className="h-56 overflow-hidden">
         <img
-          src={product.imageUrl}
+          src={getFallbackImage(product)}
           alt={product.name}
           className="h-full w-full object-cover hover:scale-110 transition-all duration-300"
-          onError={(e) => (e.currentTarget.src = "/visuals/cow-milk-user.png")}
+          onError={(e) => {
+            e.currentTarget.src = "/images/home-bg.png";
+          }}
         />
       </div>
 
