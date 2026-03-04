@@ -1,41 +1,55 @@
-import React from "react";
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
-const Hero = () => {
+const HERO_IMAGE_URL = "/images/home-bg.png";
+
+export default function Hero() {
+  const navigate = useNavigate();
+
   return (
-    <section
-      className="relative w-full h-screen flex items-center justify-center"
-      style={{
-        backgroundImage: "url('/images/hero-bg.jpg')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
-      {/* Dark Overlay */}
-      <div className="absolute inset-0 bg-black/50"></div>
+    <section className="bg-gray-100 py-20 text-center">
+      <div className="max-w-6xl mx-auto px-6">
+        
+        <motion.h1
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-4xl md:text-5xl font-bold mb-4"
+        >
+          Velvet Milk Dairy
+        </motion.h1>
 
-      {/* Content */}
-      <div className="relative z-10 text-center text-white px-6 max-w-3xl">
-        <h1 className="text-4xl md:text-6xl font-extrabold mb-6 leading-tight">
-          Fresh Dairy Delivered <br /> In Minutes 🥛
-        </h1>
+        <motion.p
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="text-lg text-gray-700 mb-6"
+        >
+          Fresh milk and dairy delivered daily — pure, healthy, reliable.
+        </motion.p>
 
-        <p className="text-lg md:text-xl mb-8 opacity-90">
-          Milk • Curd • Butter • Ghee • Paneer • Lassi • Yogurt <br />
-          Farm fresh dairy products straight to your doorstep.
-        </p>
-
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <button className="bg-green-500 hover:bg-green-600 transition text-white px-8 py-3 rounded-lg font-semibold shadow-lg">
-            Shop Now
-          </button>
-
-          <button className="bg-white text-green-600 hover:bg-gray-100 transition px-8 py-3 rounded-lg font-semibold shadow-lg">
-            View Products
-          </button>
+        <div className="mb-6">
+          <img
+            src={HERO_IMAGE_URL}
+            alt="Fresh dairy"
+            className="mx-auto w-[85%] max-h-[360px] object-contain"
+            referrerPolicy="no-referrer"
+            onError={(e) => {
+              e.currentTarget.style.display = "none";
+            }}
+          />
         </div>
+
+        <motion.button
+          onClick={() => navigate("/products")}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-lg shadow transition"
+        >
+          Start Shopping
+        </motion.button>
+
       </div>
     </section>
   );
-};
-
-export default Hero;
+}

@@ -1,14 +1,24 @@
+import { useState } from "react";
 import { useCart } from "../store/cart.jsx";
 
 export default function ProductCard({ product }) {
   const { add } = useCart();
+  const [qty, setQty] = useState(1);
+
   const handleAdd = () => {
     const price = Number(product.minPrice || 0);
     const name = (product.name || "").toLowerCase();
     const isWeight = /(paneer|butter|cheese|ghee|cream)/.test(name);
     const qtyLabel = isWeight ? "500g" : "500ml";
-    add({ id: product.id, name: product.name, imageUrl: product.imageUrl }, qtyLabel, price, "one-time", 1);
+    add(
+      { id: product.id, name: product.name, imageUrl: product.imageUrl },
+      qtyLabel,
+      price,
+      "one-time",
+      qty
+    );
   };
+
   return (
     <div className="rounded-2xl shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 overflow-hidden bg-white">
       <div className="h-56 overflow-hidden">
@@ -16,9 +26,7 @@ export default function ProductCard({ product }) {
           src={product.imageUrl}
           alt={product.name}
           className="h-full w-full object-cover hover:scale-110 transition-all duration-300"
-          onError={(e) => {
-            e.currentTarget.src = "/visuals/cow-milk-user.png";
-          }}
+          onError={(e) => (e.currentTarget.src = "/visuals/cow-milk-user.png")}
         />
       </div>
 
@@ -26,7 +34,27 @@ export default function ProductCard({ product }) {
         <h3 className="font-bold text-lg">{product.name}</h3>
         <p className="text-gray-600 mt-1">₹ {product.displayPrice}</p>
 
-        <button onClick={handleAdd} className="mt-4 w-full bg-pink-600 text-white py-3 rounded-xl hover:bg-pink-700 transition">
+        {/* Quantity selector */}
+        <div className="flex items-center justify-center space-x-4 mt-3">
+          <button
+            onClick={() => setQty((prev) => Math.max(prev - 1, 1))}
+            className="px-3 py-1 bg-gray-200 rounded"
+          >
+            -
+          </button>
+          <span className="font-bold">{qty}</span>
+          <button
+            onClick={() => setQty((prev) => prev + 1)}
+            className="px-3 py-1 bg-gray-200 rounded"
+          >
+            +
+          </button>
+        </div>
+
+        <button
+          onClick={handleAdd}
+          className="mt-4 w-full bg-pink-600 text-white py-3 rounded-xl hover:bg-pink-700 transition"
+        >
           Add to Cart 🛒
         </button>
       </div>

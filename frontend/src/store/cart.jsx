@@ -1,55 +1,61 @@
- import { createContext, useContext, useEffect, useMemo, useState } from "react";
- 
- const CartContext = createContext(null);
- 
- export function CartProvider({ children }) {
-   const [items, setItems] = useState(() => {
-     try {
-       const raw = localStorage.getItem("cart_v1");
-       return raw ? JSON.parse(raw) : [];
-     } catch {
-       return [];
-     }
-   });
- 
-   useEffect(() => {
-     localStorage.setItem("cart_v1", JSON.stringify(items));
-   }, [items]);
- 
-   const add = (product, quantityLabel, price, plan = "one-time", count = 1) => {
-     setItems((prev) => {
-       const key = `${product.id}_${quantityLabel}_${plan}`;
-       const idx = prev.findIndex((i) => i.key === key);
-       if (idx >= 0) {
-         const next = [...prev];
-         next[idx] = { ...next[idx], count: next[idx].count + count };
-         return next;
-       }
-       return [
-         ...prev,
-         {
-           key,
-           product: { id: product.id, name: product.name, imageUrl: product.imageUrl },
-           quantityLabel,
-           price: Number(price),
-           plan,
-           count,
-         },
-       ];
-     });
-   };
- 
-   const remove = (key) => setItems((prev) => prev.filter((i) => i.key !== key));
-   const clear = () => setItems([]);
- 
-   const total = useMemo(() => items.reduce((sum, i) => sum + i.price * i.count, 0), [items]);
- 
-   const value = { items, add, remove, clear, total };
-   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
- }
- 
- export function useCart() {
-   const ctx = useContext(CartContext);
-   if (!ctx) throw new Error("useCart must be used within CartProvider");
-   return ctx;
- }
+import { createContext, useContext, useState } from "react";
+
+const CartContext = createContext();
+
+export function CartProvider({ children }) {
+  const [cart, setCart] = useState([]);
+
+  const add = (product, qtyLabel, price, plan, count) => {
+    setCart((prev) => {
+      const existing = prev.find(
+        (i) => i.id === product.id && i.qtyLabel === qtyLabel && i.plan === plan
+      );
+      if (existing) {
+        const newCount = existing.count + count;
+        if (newCount <= 0) return prev.filter((i) => i !== existing);
+        return prev.map((i) => (i === existing ? { ...i, count: newCount } : i));
+      }
+      return [
+        ...prev,
+        { id: product.id, name: product.name, imageUrl: product.imageUrl, qtyLabel, plan, price, count },
+      ];
+    });
+  };
+
+  const remove = (id, qtyLabel, plan) =>
+    setCart((prev) =>
+      prev.filter((i) => !(i.id === id && i.qtyLabel === qtyLabel && i.plan === plan))
+    );
+
+  const clear = () => setCart([]);
+
+  const items = cart.map((i) => ({
+    key: `${i.id}-${i.qtyLabel}-${i.plan}`,
+    product: { id: i.id, name: i.name, imageUrl: i.imageUrl },
+    quantityLabel: i.qtyLabel,
+    plan: i.plan,
+    price: i.price,
+    count: i.count,
+  }));
+
+  const total = cart.reduce((sum, i) => sum + Number(i.price) * Number(i.count), 0);
+
+  return (
+    <CartContext.Provider value={{ cart, items, total, add, remove, clear }}>
+      {children}
+    </CartContext.Provider>
+  );
+}
+
+export function useCart() {
+  return (
+    useContext(CartContext) || {
+      cart: [],
+      items: [],
+      total: 0,
+      add: () => {},
+      remove: () => {},
+      clear: () => {},
+    }
+  );
+}

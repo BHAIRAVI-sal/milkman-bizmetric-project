@@ -1,10 +1,12 @@
  import Navbar from "../components/Navbar";
 import React from "react";
-import { CartProvider, useCart } from "../store/cart.jsx";
+import { useNavigate } from "react-router-dom";
+import { useCart } from "../store/cart.jsx";
 import { createRazorpayOrder, verifyRazorpay } from "../lib/payments";
- 
+
 function CheckoutBody() {
   const { items, total, clear } = useCart();
+  const navigate = useNavigate();
   const [upiId, setUpiId] = React.useState("");
   const payWithCOD = async () => {
     try {
@@ -22,7 +24,7 @@ function CheckoutBody() {
       });
       clear();
       alert("Order placed with Cash on Delivery!");
-      window.location.href = "/dashboard";
+      navigate("/order-success");
     } catch {
       alert("COD failed. Please try again.");
     }
@@ -62,7 +64,7 @@ function CheckoutBody() {
           });
           clear();
           alert("Payment successful. Order placed!");
-          window.location.href = "/dashboard";
+          navigate("/order-success");
         },
         theme: { color: "#db2777" },
       };
@@ -98,7 +100,7 @@ function CheckoutBody() {
           });
           clear();
           alert("UPI payment successful. Order placed!");
-          window.location.href = "/dashboard";
+          navigate("/order-success");
         },
         method: { upi: 1, card: 0, netbanking: 0, wallet: 0 },
         prefill: { vpa: upiId || undefined },
@@ -170,9 +172,5 @@ function CheckoutBody() {
  }
  
  export default function Checkout() {
-   return (
-     <CartProvider>
-       <CheckoutBody />
-     </CartProvider>
-   );
+   return <CheckoutBody />;
  }

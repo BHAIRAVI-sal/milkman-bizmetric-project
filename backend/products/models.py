@@ -34,3 +34,15 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class ProductStock(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="stock_items")
+    quantity = models.ForeignKey(Quantity, on_delete=models.CASCADE)
+    stock_count = models.IntegerField(default=0)
+
+    class Meta:
+        unique_together = ("product", "quantity")
+
+    def __str__(self):
+        return f"{self.product.name} - {self.quantity.label}: {self.stock_count}"
