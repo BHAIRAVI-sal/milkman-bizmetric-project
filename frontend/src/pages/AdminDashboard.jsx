@@ -17,7 +17,7 @@ export default function AdminDashboard() {
       try {
         setLoading(true);
         setError("");
-        const res = await fetch("http://127.0.0.1:8000/api/products/admin/stocks/", {
+        const res = await fetch("https://bhairavisalunkhe.duckdns.org/api/products/admin/stocks/", {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -71,7 +71,7 @@ export default function AdminDashboard() {
         })),
       };
 
-      const res = await fetch("http://127.0.0.1:8000/api/products/admin/stocks/upsert/", {
+      const res = await fetch("https://bhairavisalunkhe.duckdns.org/api/products/admin/stocks/upsert/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -23,7 +23,7 @@ import productImageMap from "../assets/productImageMap";
                ? p.quantities.map((q) => Number(q.price)).filter((n) => !Number.isNaN(n))
                : [];
            const min = prices.length ? Math.min(...prices) : 0;
-          const backendImage = p.image ? `http://localhost:8000${p.image}` : null;
+          const backendImage = p.image ? `https://bhairavisalunkhe.duckdns.org${p.image}` : null;
           return {
              id: p.id,
              name: p.name,

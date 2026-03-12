@@ -17,7 +17,7 @@ function CheckoutBody() {
           count: i.count,
         })),
       };
-      await fetch("http://localhost:8000/api/orders/checkout/cod/", {
+      await fetch("https://bhairavisalunkhe.duckdns.org/api/orders/checkout/cod/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

@@ -1,3 +1,4 @@
+
 from datetime import timedelta
 
 REST_FRAMEWORK = {
@@ -38,9 +39,11 @@ SECRET_KEY = 'django-insecure-z=_us8ogdr5r8z5_cqgs^a7#p#*@5hh)v5__8i96h+t3^2wlud
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
-
+ALLOWED_HOSTS = [
+    "104.208.82.28",
+    "bhairavisalunkhe.duckdns.org",
+    "milkmanbackend.duckdns.org"
+]
 # Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -136,9 +139,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://bhairavisalunkhe.duckdns.org",
+]

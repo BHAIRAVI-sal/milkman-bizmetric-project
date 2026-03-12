@@ -20,7 +20,7 @@ export default function ProductDetails() {
     // 1. Product-specific image from local map (highest priority)
     if (productImageMap[p.name]) return productImageMap[p.name];
     // 2. Backend image — only if it's not the seeded placeholder
-    if (p.image && !p.image.includes("placeholder")) return `http://localhost:8000${p.image}`;
+    if (p.image && !p.image.includes("placeholder")) return `https://bhairavisalunkhe.duckdns.org${p.image}`;
     // 3. Category image as last resort
     return getCategoryImage(p.category?.name || "Milk") || "/images/home-bg.png";
   };

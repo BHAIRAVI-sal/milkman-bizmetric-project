@@ -1,0 +1,8 @@
+[
+ {
+  "id": "deploy",
+  "execute-command": "/home/azureuser/milkman-bizmetric-project/deploy.sh",
+  "command-working-directory": "/home/azureuser/milkman-bizmetric-project",
+  "response-message": "Deployment triggered"
+ }
+]

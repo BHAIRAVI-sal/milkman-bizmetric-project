@@ -25,7 +25,7 @@ export default function ProductSection() {
             name: p.name,
             imageUrl:
               productImageMap[p.name] ||
-              (p.image ? `http://localhost:8000${p.image}` : null) ||
+              (p.image ? `https://bhairavisalunkhe.duckdns.org${p.image}` : null) ||
               getCategoryImage(p.category?.name || "Milk"),
             displayPrice: min ? `from ${min}` : "N/A",
             minPrice: min,
